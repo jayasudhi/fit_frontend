@@ -1,0 +1,801 @@
+ * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .workout-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .workout-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="0.5" fill="%23000000" opacity="0.02"/><circle cx="75" cy="75" r="0.8" fill="%23000000" opacity="0.01"/><circle cx="50" cy="10" r="0.3" fill="%23000000" opacity="0.03"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .workout-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .workout-category {
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            color: #495057;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .workout-category:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .workout-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #212529;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .workout-description {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .user-progress {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .user-progress::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: linear-gradient(180deg, #343a40, #6c757d);
+            border-radius: 0 5px 5px 0;
+        }
+
+        .user-progress:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .progress-title {
+            color: #212529;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .progress-bar {
+            background: rgba(0, 0, 0, 0.1);
+            height: 8px;
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #495057, #343a40);
+            width: 65%;
+            border-radius: 50px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: progressFlow 2s ease-in-out;
+        }
+
+        @keyframes progressFlow {
+            0% { width: 0%; }
+            100% { width: 65%; }
+        }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .exercise-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 0, 0, 0.05), transparent);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .exercise-card:hover::before {
+            opacity: 1;
+            animation: rotate 2s linear infinite;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .exercise-name {
+            color: #212529;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .exercise-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #495057, #343a40);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .exercise-description {
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            color: #6c757d;
+            line-height: 1.5;
+            position: relative;
+            z-index: 2;
+        }
+
+        .exercise-details {
+            position: relative;
+            z-index: 2;
+        }
+
+        .exercise-details p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #495057;
+            display: flex;
+            align-items: center;
+        }
+
+        .exercise-details p::before {
+            content: '•';
+            color: #6c757d;
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .workout-buttons {
+            margin-top: 3rem;
+            text-align: center;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary, .btn-return {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: #212529;
+            color: white;
+            box-shadow: 0 8px 25px rgba(33, 37, 41, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #495057;
+            border-color: #495057;
+            box-shadow: 0 8px 25px rgba(73, 80, 87, 0.1);
+        }
+
+        .btn-return {
+            background: #f8f9fa;
+            color: #495057;
+            border-color: #dee2e6;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: #495057;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(33, 37, 41, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #495057;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(73, 80, 87, 0.2);
+        }
+
+        .btn-return:hover {
+            background: #e9ecef;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:active, .btn-secondary:active, .btn-return:active {
+            transform: translateY(-1px);
+        }
+
+        .workout-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #495057;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            margin-bottom: 1rem;
+        }
+
+        .loading-text {
+            color: #495057;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Floating elements animation */
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.05;
+            font-size: 2rem;
+            color: #495057;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation: float 7s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .workout-container {
+                padding: 1rem;
+            }
+            
+            .workout-title {
+                font-size: 2rem;
+            }
+            
+            .exercise-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .workout-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-primary, .btn-secondary, .btn-return {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Progress text styling */
+        .progress-text {
+            color: #6c757d;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .progress-stats {
+            color: #495057;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        } * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .workout-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .workout-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="0.5" fill="%23000000" opacity="0.02"/><circle cx="75" cy="75" r="0.8" fill="%23000000" opacity="0.01"/><circle cx="50" cy="10" r="0.3" fill="%23000000" opacity="0.03"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .workout-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .workout-category {
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            color: #495057;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .workout-category:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .workout-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #212529;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .workout-description {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .user-progress {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .user-progress::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: linear-gradient(180deg, #343a40, #6c757d);
+            border-radius: 0 5px 5px 0;
+        }
+
+        .user-progress:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .progress-title {
+            color: #212529;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .progress-bar {
+            background: rgba(0, 0, 0, 0.1);
+            height: 8px;
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #495057, #343a40);
+            width: 65%;
+            border-radius: 50px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: progressFlow 2s ease-in-out;
+        }
+
+        @keyframes progressFlow {
+            0% { width: 0%; }
+            100% { width: 65%; }
+        }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .exercise-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 0, 0, 0.05), transparent);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .exercise-card:hover::before {
+            opacity: 1;
+            animation: rotate 2s linear infinite;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .exercise-name {
+            color: #212529;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .exercise-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #495057, #343a40);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .exercise-description {
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            color: #6c757d;
+            line-height: 1.5;
+            position: relative;
+            z-index: 2;
+        }
+
+        .exercise-details {
+            position: relative;
+            z-index: 2;
+        }
+
+        .exercise-details p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #495057;
+            display: flex;
+            align-items: center;
+        }
+
+        .exercise-details p::before {
+            content: '•';
+            color: #6c757d;
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .workout-buttons {
+            margin-top: 3rem;
+            text-align: center;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary, .btn-return {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: #212529;
+            color: white;
+            box-shadow: 0 8px 25px rgba(33, 37, 41, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #495057;
+            border-color: #495057;
+            box-shadow: 0 8px 25px rgba(73, 80, 87, 0.1);
+        }
+
+        .btn-return {
+            background: #f8f9fa;
+            color: #495057;
+            border-color: #dee2e6;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: #495057;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(33, 37, 41, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #495057;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(73, 80, 87, 0.2);
+        }
+
+        .btn-return:hover {
+            background: #e9ecef;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:active, .btn-secondary:active, .btn-return:active {
+            transform: translateY(-1px);
+        }
+
+        .workout-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #495057;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            margin-bottom: 1rem;
+        }
+
+        .loading-text {
+            color: #495057;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Floating elements animation */
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.05;
+            font-size: 2rem;
+            color: #495057;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation: float 7s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .workout-container {
+                padding: 1rem;
+            }
+            
+            .workout-title {
+                font-size: 2rem;
+            }
+            
+            .exercise-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .workout-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-primary, .btn-secondary, .btn-return {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Progress text styling */
+        .progress-text {
+            color: #6c757d;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .progress-stats {
+            color: #495057;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
